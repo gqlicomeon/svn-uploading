@@ -106,8 +106,9 @@ class SvnUploading{
             }
         }else{//为空则添加this.cwd下所有的文件到svn
             for(let i=0;i<unknownList.length;i++){
-               return await this.add(unknownList[i]);
+               await this.add(unknownList[i]);
             }
+            return true;
         }
     }
     delete(deletePath){
