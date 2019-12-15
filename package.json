@@ -1,6 +1,6 @@
 {
   "name": "svn-uploading",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A svn uploading package",
   "main": "index.js",
   "scripts": {

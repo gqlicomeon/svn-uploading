@@ -14,8 +14,8 @@
 ```
 `svn update 更新代码`
 ```js
-    svn.update().then(bol=>{
-        //bol true or false
+    svn.update().then(res=>{
+        //do something
     }).catch(err=>{
     
     })
@@ -25,7 +25,7 @@
     //方法返回promise 的thenable对象
     svn.check().then(status=>{
         //do something
-        //status ==> {add:["addfilepath1","addfilepath2",...],modify:["modifypath1",modifypath2,...]}
+        //status ==> {addList:["addfilepath1","addfilepath2",...],modifyList:["modifypath1",modifypath2,...],deleteList:[],unknownList:[]}
     }).catch(err=>{
         //something error
     })  
@@ -35,21 +35,47 @@
     /**
     *@param {String} 要添加到仓库的文件或文件夹的路径(绝对路径或相对路径)，不填则默认为初始化cwd目录下的所有文件
     */
-    svn.add(url).then(bol=>{
-        //bol 是否添加成功
+    svn.add(url).then(res=>{
+         //do something
     }).catch(err=>{
         //something error
     })
 ```
-`svn upload 封装了以上方法，上传文件`
+`svn delete 删除代码`
+```js
+    /**
+    *@param {String}（必填）要删除的仓库文件或文件夹的路径(绝对路径或相对路径) 
+    */
+    svn.add(url).then(res=>{
+         //do something
+    }).catch(err=>{
+        //something error
+    })
+```
+
+`svn commit 上传代码`
+```js
+    /**
+    *@param {Object}（必填）要删除的仓库文件或文件夹的路径(绝对路径或相对路径) 
+    * @description {name} 上传单个文件时name为文件或文件名的相对路径或绝对路径；若上传cwd路径下的所有文件，name传空
+    * @description {msg} 本次上传说明
+    */
+    svn.commit(ops).then(res=>{
+        //do something
+    }).catch(err=>{
+        //something error
+    })
+```
+
+`svn upload 组合了以上方法，一键上传文件`
 ```js
      /**
      * @param {Object}
      * @description {name} 上传单个文件时name为文件或文件名的相对路径或绝对路径；若上传cwd路径下的所有文件，name传空
      * @description {msg} 本次上传说明
      */
-    svn.upload(url).then(bol=>{
-        //bol 是否上传成功
+    svn.upload(opts).then(res=>{
+        //do something
     }).then(err=>{
          //something error
     })
