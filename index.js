@@ -1,6 +1,6 @@
 /*Svn 上传插件*/
 const {exec} = require("child_process");
-const {resolve} = require("path");
+const path = require("path");
 /**
  * 处理$ svn status的输出
  * @param {String} str 
@@ -12,7 +12,7 @@ function handleStatus(str,cwd=process.cwd()){
     let obj = {modifyList:[],addList:[],unknownList:[],deleteList:[]}
     arr.slice(0,-1).forEach(val => {
         let [type,url] = val.split(/\s+/);
-        url = resolve(cwd,url);
+        url = path.resolve(cwd,url);
         switch(type){
             case "?":
                 obj.unknownList.push(url);
@@ -82,7 +82,7 @@ class SvnUploading{
         }
         let {addList,unknownList,modifyList} = this.status;
         if(addPath){
-            addPath = resolve(that.cwd,addPath);
+            addPath = path.resolve(that.cwd,addPath);
             if(unknownList.includes(addPath)){//所添加文件在add目录
                 return await new Promise((resolve,reject)=>{
                     exec(`svn add ${addPath}`,{cwd:that.cwd},(error,stdout,stderr)=>{
@@ -90,6 +90,7 @@ class SvnUploading{
                             reject(new Error(error));
                         }
                         if(stdout){
+                            console.log(stdout);
                             resolve(stdout);
                         }
                         if(stderr){
@@ -98,13 +99,14 @@ class SvnUploading{
                     })
                 })
             }else if(addList.includes(addPath) || modifyList.includes(addPath)){//所添加文件在modify目录
-                throw new Error(`${addPath}已被添加到svn,不需要重复添加`);
+                console.log(`${addPath}已在svn版管理中,准备提交到svn`);
+                return true;
             }else{
                 throw new Error(`add ${addPath}失败,无法找到该文件`);
             }
         }else{//为空则添加this.cwd下所有的文件到svn
-            for(let i=0;i<addList.length;i++){
-               return await this.add(addList[i]);
+            for(let i=0;i<unknownList.length;i++){
+               return await this.add(unknownList[i]);
             }
         }
     }
@@ -115,7 +117,7 @@ class SvnUploading{
                 reject(new Error("请先调用check方法获取当前检出目录的状态"));
             }
             if(deletePath){
-                deletePath = resolve(that.cwd,deletePath);
+                deletePath = path.resolve(that.cwd,deletePath);
                 exec(`svn delete ${deletePath}`,{cwd:that.cwd},(error,stdout,stderr)=>{
                     if (error) {
                         reject(new Error(error));
@@ -140,12 +142,13 @@ class SvnUploading{
     commit({name,msg="提交更改代码"}={}){
         let that = this;
         return new Promise((resolve,reject)=>{
-            let execStr = name ? `svn commit -m ${msg} ${resolve(this.cwd,name)}` : `svn commit -m ${msg}`;
+            let execStr = name ? `svn commit -m ${msg} ${path.resolve(this.cwd,name)}` : `svn commit -m ${msg}`;
             exec(execStr,{cwd:that.cwd},(error,stdout,stderr)=>{
                 if (error) {
                     reject(new Error(error));
                 }
                 if(stdout){
+                    console.log(stdout);
                     resolve(stdout);
                 }
                 if(stderr){

@@ -1,5 +1,5 @@
 # svn-uploading
-一个简便的svn代码上传插件，初始化后只需调用svn.upload即可实现svn上传功能
+一个简便的svn代码上传模块，一键上传代码到svn，从此妈妈再也不用担心我不会上传svn了
 ## 安装：
 `$ npm install svn-uploading`
 
@@ -17,12 +17,14 @@
     svn.update().then(res=>{
         //do something
     }).catch(err=>{
-    
+        //something error
     })
 ```
 `svn check 查看代码更改状态`
 ```js
-    //方法返回promise 的thenable对象
+    /**
+     * 方法返回promise 的thenable对象
+     * */
     svn.check().then(status=>{
         //do something
         //status ==> {addList:["addfilepath1","addfilepath2",...],modifyList:["modifypath1",modifypath2,...],deleteList:[],unknownList:[]}
