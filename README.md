@@ -1,5 +1,5 @@
 # svn-uploading
-一个简便的svn代码上传模块，一键上传代码到svn，从此妈妈再也不用担心我不会上传svn了
+一个简便的svn代码上传模块，一键上传代码到svn
 ## 安装：
 `$ npm install svn-uploading`
 
